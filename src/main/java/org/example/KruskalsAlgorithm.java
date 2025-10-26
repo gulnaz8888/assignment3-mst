@@ -3,7 +3,7 @@ package org.example;
 import java.util.*;
 
 public class KruskalsAlgorithm implements MSTAlgorithm {
-    private PerformanceTracker tracker;
+    private final PerformanceTracker tracker;
 
     public KruskalsAlgorithm(PerformanceTracker tracker) {
         this.tracker = tracker;
@@ -16,24 +16,25 @@ public class KruskalsAlgorithm implements MSTAlgorithm {
 
     @Override
     public List<Edge> findMST(Graph graph) {
+        tracker.reset();
         tracker.startTimer();
 
         List<Edge> mst = new ArrayList<>();
         List<Edge> edges = new ArrayList<>(graph.getEdges());
-        Collections.sort(edges);
 
-        UnionFind uf = new UnionFind(graph.getVertices());
+        edges.sort((a, b) -> {
+            tracker.countComparison();
+            return Integer.compare(a.getWeight(), b.getWeight());
+        });
+
+        UnionFind uf = new UnionFind(graph.getVertices(), tracker);
 
         for (Edge edge : edges) {
-            if (mst.size() == graph.getVertices() - 1) {
-                break;
-            }
+            if (mst.size() == graph.getVertices() - 1) break;
 
-            tracker.countComparison();
-            if (!uf.connected(edge.getSource(), edge.getDestination())) {
-                tracker.countUnion();
-                uf.union(edge.getSource(), edge.getDestination());
+            if (uf.unionIfDifferent(edge.getSource(), edge.getDestination())) {
                 mst.add(edge);
+            } else {
             }
         }
 
