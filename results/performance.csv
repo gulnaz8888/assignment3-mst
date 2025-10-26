@@ -1,0 +1,5 @@
+graph,vertices,edges,prim_cost,kruskal_cost,same_cost,prim_time_ms,kruskal_time_ms,prim_ops,kruskal_ops
+Small Graph - 4 vertices,4,5,19,19,true,1,0,20,7
+Small Graph - 5 vertices,5,6,11,11,true,0,0,27,9
+Medium Graph - 10 vertices,10,15,24,24,true,0,0,41,18
+Large Graph - 20 vertices,20,30,49,49,true,1,0,120,42

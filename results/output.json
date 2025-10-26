@@ -1,0 +1,47 @@
+{
+  "results" : [ {
+    "graph_name" : "Small Graph - 4 vertices",
+    "vertices" : 4,
+    "edges" : 5,
+    "prim_cost" : 19,
+    "kruskal_cost" : 19,
+    "same_cost" : true,
+    "prim_time_ms" : 1,
+    "kruskal_time_ms" : 0,
+    "prim_ops" : 20,
+    "kruskal_ops" : 7
+  }, {
+    "graph_name" : "Small Graph - 5 vertices",
+    "vertices" : 5,
+    "edges" : 6,
+    "prim_cost" : 11,
+    "kruskal_cost" : 11,
+    "same_cost" : true,
+    "prim_time_ms" : 0,
+    "kruskal_time_ms" : 0,
+    "prim_ops" : 27,
+    "kruskal_ops" : 9
+  }, {
+    "graph_name" : "Medium Graph - 10 vertices",
+    "vertices" : 10,
+    "edges" : 15,
+    "prim_cost" : 24,
+    "kruskal_cost" : 24,
+    "same_cost" : true,
+    "prim_time_ms" : 0,
+    "kruskal_time_ms" : 0,
+    "prim_ops" : 41,
+    "kruskal_ops" : 18
+  }, {
+    "graph_name" : "Large Graph - 20 vertices",
+    "vertices" : 20,
+    "edges" : 30,
+    "prim_cost" : 49,
+    "kruskal_cost" : 49,
+    "same_cost" : true,
+    "prim_time_ms" : 1,
+    "kruskal_time_ms" : 0,
+    "prim_ops" : 120,
+    "kruskal_ops" : 42
+  } ]
+}
