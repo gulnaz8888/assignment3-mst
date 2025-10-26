@@ -20,17 +20,17 @@ public class UnionFind {
     }
 
     public int find(int x) {
-        if (tracker != null) tracker.countFind();  // считаем каждый вызов find
+        if (tracker != null) tracker.countFind();
         if (parent[x] != x) parent[x] = find(parent[x]);
         return parent[x];
     }
 
     public boolean connected(int x, int y) {
-        return find(x) == find(y); // это честно посчитает 2 find
+        return find(x) == find(y);
     }
 
     public void union(int x, int y) {
-        if (tracker != null) tracker.countUnion(); // считаем попытку union
+        if (tracker != null) tracker.countUnion();
         int rx = find(x);
         int ry = find(y);
         if (rx == ry) return;
