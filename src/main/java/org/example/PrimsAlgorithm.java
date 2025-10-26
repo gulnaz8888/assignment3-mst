@@ -3,7 +3,7 @@ package org.example;
 import java.util.*;
 
 public class PrimsAlgorithm implements MSTAlgorithm {
-    private PerformanceTracker tracker;
+    private final PerformanceTracker tracker;
 
     public PrimsAlgorithm(PerformanceTracker tracker) {
         this.tracker = tracker;
@@ -14,55 +14,57 @@ public class PrimsAlgorithm implements MSTAlgorithm {
         return "Prim's Algorithm";
     }
 
+    private static class PQEdge {
+        final int from, to, w;
+        PQEdge(int from, int to, int w) { this.from = from; this.to = to; this.w = w; }
+    }
+
     @Override
     public List<Edge> findMST(Graph graph) {
+        tracker.reset();
         tracker.startTimer();
 
-        int vertices = graph.getVertices();
+        int n = graph.getVertices();
         List<Edge> mst = new ArrayList<>();
-        boolean[] visited = new boolean[vertices];
-        PriorityQueue<Edge> pq = new PriorityQueue<>();
+        if (n == 0) {
+            tracker.stopTimer();
+            return mst;
+        }
 
-        visited[0] = true;
-        addEdgesToQueue(0, graph, pq);
+        boolean[] inMST = new boolean[n];
 
-        while (!pq.isEmpty() && mst.size() < vertices - 1) {
-            Edge edge = pq.poll();
+        PriorityQueue<PQEdge> pq = new PriorityQueue<>((a, b) -> {
             tracker.countComparison();
+            return Integer.compare(a.w, b.w);
+        });
 
-            int nextVertex = getUnvisitedVertex(edge, visited);
+        inMST[0] = true;
+        pushAdjEdges(0, graph, inMST, pq);
 
-            if (nextVertex != -1) {
-                visited[nextVertex] = true;
-                mst.add(edge);
-                addEdgesToQueue(nextVertex, graph, pq);
-            }
+        while (!pq.isEmpty() && mst.size() < n - 1) {
+            PQEdge e = pq.poll();
+            int v = inMST[e.from] && !inMST[e.to] ? e.to
+                    : inMST[e.to] && !inMST[e.from] ? e.from
+                    : -1;
+
+            if (v == -1) continue;
+
+            int u = (v == e.to) ? e.from : e.to;
+            mst.add(new Edge(u, v, e.w));
+            inMST[v] = true;
+            pushAdjEdges(v, graph, inMST, pq);
         }
 
         tracker.stopTimer();
         return mst;
     }
 
-    private void addEdgesToQueue(int vertex, Graph graph, PriorityQueue<Edge> pq) {
-        for (Edge edge : graph.getAdjacentEdges(vertex)) {
-            pq.offer(edge);
+    private void pushAdjEdges(int u, Graph graph, boolean[] inMST, PriorityQueue<PQEdge> pq) {
+        for (Edge e : graph.getAdjacentEdges(u)) {
+            int v = (e.getSource() == u) ? e.getDestination() : e.getSource();
+            if (!inMST[v]) {
+                pq.offer(new PQEdge(u, v, e.getWeight()));
+            }
         }
-    }
-
-    private int getUnvisitedVertex(Edge edge, boolean[] visited) {
-        int source = edge.getSource();
-        int destination = edge.getDestination();
-
-        tracker.countComparison();
-        if (!visited[source] && visited[destination]) {
-            return source;
-        }
-
-        tracker.countComparison();
-        if (visited[source] && !visited[destination]) {
-            return destination;
-        }
-
-        return -1;
     }
 }
